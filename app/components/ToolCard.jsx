@@ -1,13 +1,21 @@
-'use client';
-import Link from 'next/link';
+import ToolCard from './components/ToolCard';
 
-export default function ToolCard({ toolId, title, description }) {
-  return (
-    <Link href={`/tools/${toolId}`}>
-      <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition cursor-pointer">
-        <h3 className="text-lg font-semibold mb-2">{title}</h3>
-        <p className="text-gray-500 text-sm">{description}</p>
-      </div>
-    </Link>
-  );
-}
+// तपाईंको tools array मा
+const tools = [
+  {
+    id: 'word-to-html',
+    title: 'Word to HTML',
+    description: 'Convert Word documents to clean HTML code'
+  },
+  // ... अन्य tools
+];
+
+// Render गर्दा
+{tools.map((tool) => (
+  <ToolCard 
+    key={tool.id}
+    toolId={tool.id}
+    title={tool.title}
+    description={tool.description}
+  />
+))}
