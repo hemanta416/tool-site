@@ -1,7 +1,7 @@
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { 
-  FileText, Image, Youtube, Globe, Zap, Upload, 
+  FileText, Image, Youtube, Globe, 
   FileSpreadsheet, FilePresentation, Code, ArrowRight, 
   Shield, Clock
 } from 'lucide-react';

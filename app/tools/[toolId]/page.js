@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -114,8 +114,17 @@ const toolConfigs = {
 
 export default function ToolPage() {
   const params = useParams();
-  const toolId = params.toolId;
-  const tool = toolConfigs[toolId] || {
+  const [toolId, setToolId] = useState(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    if (params?.toolId) {
+      setToolId(params.toolId);
+    }
+  }, [params]);
+
+  const tool = toolId ? toolConfigs[toolId] : {
     title: 'File Converter',
     description: 'Convert your files easily',
     inputFormats: ['.txt'],
@@ -196,6 +205,17 @@ export default function ToolPage() {
   };
 
   const isYouTubeTool = toolId === 'youtube-summarize';
+
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 text-blue-600 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading tool...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
