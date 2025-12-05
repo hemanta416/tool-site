@@ -3,5 +3,11 @@
 @tailwind utilities;
 
 body {
+  @apply bg-gray-50 text-gray-900;
+  margin: 0;
   font-family: 'Inter', sans-serif;
+}
+a {
+  @apply text-blue-600 hover:text-blue-800;
+  text-decoration: none;
 }
