@@ -1,6 +1,15 @@
 'use client';
 
-import { ArrowRight, FileText, Image, Youtube, FileSpreadsheet, FilePresentation } from 'lucide-react';
+import { 
+  ArrowRight, 
+  FileText, 
+  Image, 
+  Youtube, 
+  FileSpreadsheet, 
+  FilePresentation,
+  Globe    // <-- This was missing
+} from 'lucide-react';
+
 import { useState } from 'react';
 
 const iconMap = {
