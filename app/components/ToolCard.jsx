@@ -7,7 +7,7 @@ const iconMap = {
   'word': FileText,
   'pdf': FileText,
   'excel': FileSpreadsheet,
-  'ppt': FileText, // FilePresentation हटाइयो, FileText प्रयोग
+  'ppt': FileText, // FilePresentation icon can be added if available
   'photo': Image,
   'youtube': Youtube,
   'translate': Globe
