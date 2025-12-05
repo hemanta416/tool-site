@@ -2,24 +2,33 @@
 
 import { useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { 
-  Upload, Download, File, Image, X, 
-  CheckCircle, AlertCircle, Loader2,
-  ArrowLeft, Settings, Globe
-} from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
-import Link from 'next/link';
+import {
+  Upload,
+  Download,
+  File,
+  Image,
+  X,
+  CheckCircle,
+  AlertCircle,
+  Loader2,
+  ArrowLeft,
+  Settings,
+  Globe
+} from 'lucide-react';
 import { ToolConfig } from '@/types';
 
+// Tool configuration with React component references
 const toolConfigs: Record<string, ToolConfig> = {
   'word-to-html': {
     title: 'Word to HTML Converter',
     description: 'Convert Word documents (.doc, .docx) to clean HTML code',
     inputFormats: ['.doc', '.docx'],
     outputFormat: '.html',
-    icon: <File className="h-10 w-10" />,
+    icon: File,
     color: 'purple'
   },
   'pdf-to-word': {
@@ -27,21 +36,30 @@ const toolConfigs: Record<string, ToolConfig> = {
     description: 'Extract text from PDF files and convert to editable Word documents',
     inputFormats: ['.pdf'],
     outputFormat: '.docx',
-    icon: <File className="h-10 w-10" />,
+    icon: File,
     color: 'blue'
   },
-  // अन्य सबै टूलहरूको configuration थप्न सक्नुहुन्छ
+  'photo-converter': {
+    title: 'Photo Converter',
+    description: 'Convert images to different formats',
+    inputFormats: ['.jpg', '.jpeg', '.png', '.gif'],
+    outputFormat: '.png',
+    icon: Image,
+    color: 'orange'
+  },
+  // अन्य tools यहाँ थप्न सक्नुहुन्छ
 };
 
 export default function ToolPage() {
   const params = useParams();
   const toolId = params.toolId as string;
+
   const tool = toolConfigs[toolId] || {
     title: 'File Converter',
     description: 'Convert your files easily',
     inputFormats: ['.txt'],
     outputFormat: '.txt',
-    icon: <File className="h-10 w-10" />,
+    icon: File,
     color: 'gray'
   };
 
@@ -57,22 +75,19 @@ export default function ToolPage() {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'application/pdf': ['.pdf'],
-      'application/msword': ['.doc'],
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-      'application/vnd.ms-excel': ['.xls'],
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-      'application/vnd.ms-powerpoint': ['.ppt'],
-      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
-      'image/*': ['.jpg', '.jpeg', '.png', '.gif']
-    }
+    accept: tool.inputFormats.reduce((acc, ext) => {
+      if (ext === '.pdf') acc['application/pdf'] = ['.pdf'];
+      if (ext === '.doc') acc['application/msword'] = ['.doc'];
+      if (ext === '.docx') acc['application/vnd.openxmlformats-officedocument.wordprocessingml.document'] = ['.docx'];
+      if (['.jpg', '.jpeg', '.png', '.gif'].includes(ext)) acc['image/*'] = ['.jpg', '.jpeg', '.png', '.gif'];
+      return acc;
+    }, {} as Record<string, string[]>)
   });
 
   const handleConvert = async () => {
     if (!file) return;
-
     setIsConverting(true);
+
     setTimeout(() => {
       setConvertedFile({
         name: `converted_${file.name.replace(/\.[^/.]+$/, '')}${tool.outputFormat}`,
@@ -92,32 +107,37 @@ export default function ToolPage() {
     setConvertedFile(null);
   };
 
+  const IconComponent = tool.icon; // React component reference
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">
-        <Link 
-          href="/" 
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-6"
-        >
+        {/* Back Link */}
+        <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-6">
           <ArrowLeft className="h-4 w-4" /> Back to All Tools
         </Link>
 
+        {/* Tool Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center p-4 rounded-2xl bg-blue-50 mb-4">
-            <div className="text-blue-600">{tool.icon}</div>
+            <IconComponent className="h-10 w-10 text-blue-600" />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{tool.title}</h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">{tool.description}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {/* Left Column: Upload & Conversion */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <div 
-                {...getRootProps()} 
-                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'}`}
+              {/* Upload Zone */}
+              <div
+                {...getRootProps()}
+                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${
+                  isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+                }`}
               >
                 <input {...getInputProps()} />
                 <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -134,6 +154,7 @@ export default function ToolPage() {
                 </p>
               </div>
 
+              {/* File Preview */}
               {file && (
                 <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
                   <div className="flex items-center justify-between">
@@ -151,11 +172,14 @@ export default function ToolPage() {
                 </div>
               )}
 
+              {/* Convert Button */}
               <div className="mt-8">
                 <button
                   onClick={handleConvert}
                   disabled={!file || isConverting}
-                  className={`w-full py-4 rounded-xl font-semibold text-lg ${!file || isConverting ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+                  className={`w-full py-4 rounded-xl font-semibold text-lg ${
+                    !file || isConverting ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'
+                  }`}
                 >
                   {isConverting ? (
                     <span className="flex items-center justify-center gap-2">
@@ -167,6 +191,7 @@ export default function ToolPage() {
                 </button>
               </div>
 
+              {/* Result Section */}
               {convertedFile && (
                 <div className="mt-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200">
                   <div className="flex items-center gap-3 mb-4">
@@ -195,8 +220,9 @@ export default function ToolPage() {
             </div>
           </div>
 
-          {/* Right Column - Settings & Tips */}
+          {/* Right Column: Settings & Tips */}
           <div className="space-y-6">
+            {/* Settings Panel */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center gap-3 mb-6">
                 <Settings className="h-5 w-5 text-gray-600" />
@@ -204,24 +230,19 @@ export default function ToolPage() {
               </div>
             </div>
 
+            {/* Features */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-lg font-semibold mb-4">Features</h3>
               <ul className="space-y-3">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" /> <span>100% Free</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" /> <span>No Registration Required</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" /> <span>Secure & Private</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" /> <span>Fast Processing</span>
-                </li>
+                {['100% Free', 'No Registration Required', 'Secure & Private', 'Fast Processing'].map((feat) => (
+                  <li key={feat} className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" /> <span>{feat}</span>
+                  </li>
+                ))}
               </ul>
             </div>
 
+            {/* Tips */}
             <div className="bg-blue-50 rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-3">
                 <AlertCircle className="h-5 w-5 text-blue-600" />
