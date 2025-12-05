@@ -1,10 +1,12 @@
+import React from 'react';
+
 export interface Tool {
   id: string;
   title: string;
   description: string;
-  icon: React.ReactNode;
-  color: string;
-  bgColor: string;
+  icon: React.ReactNode;  // React icon component
+  color: string;          // icon/text color
+  bgColor: string;        // icon background color
 }
 
 export interface ToolConfig {
