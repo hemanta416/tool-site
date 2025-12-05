@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -13,14 +13,13 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-// Configuration without JSX in icons
 const toolConfigs = {
   'word-to-html': {
     title: 'Word to HTML Converter',
     description: 'Convert Word documents (.doc, .docx) to clean HTML code',
     inputFormats: ['.doc', '.docx'],
     outputFormat: '.html',
-    icon: 'Code',
+    icon: Code,
     color: 'purple'
   },
   'pdf-to-word': {
@@ -28,7 +27,7 @@ const toolConfigs = {
     description: 'Extract text from PDF files and convert to editable Word documents',
     inputFormats: ['.pdf'],
     outputFormat: '.docx',
-    icon: 'FileText',
+    icon: FileText,
     color: 'blue'
   },
   'word-to-pdf': {
@@ -36,7 +35,7 @@ const toolConfigs = {
     description: 'Convert Word files to PDF format with preserved formatting',
     inputFormats: ['.doc', '.docx'],
     outputFormat: '.pdf',
-    icon: 'FileText',
+    icon: FileText,
     color: 'red'
   },
   'pdf-to-excel': {
@@ -44,7 +43,7 @@ const toolConfigs = {
     description: 'Convert PDF tables to Excel spreadsheets',
     inputFormats: ['.pdf'],
     outputFormat: '.xlsx',
-    icon: 'FileSpreadsheet',
+    icon: FileSpreadsheet,
     color: 'green'
   },
   'excel-to-pdf': {
@@ -52,7 +51,7 @@ const toolConfigs = {
     description: 'Convert Excel files to PDF documents',
     inputFormats: ['.xls', '.xlsx'],
     outputFormat: '.pdf',
-    icon: 'FileSpreadsheet',
+    icon: FileSpreadsheet,
     color: 'yellow'
   },
   'ppt-to-pdf': {
@@ -60,7 +59,7 @@ const toolConfigs = {
     description: 'Convert PowerPoint presentations to PDF',
     inputFormats: ['.ppt', '.pptx'],
     outputFormat: '.pdf',
-    icon: 'FilePresentation',
+    icon: FilePresentation,
     color: 'orange'
   },
   'pdf-to-ppt': {
@@ -68,7 +67,7 @@ const toolConfigs = {
     description: 'Convert PDF slides to PowerPoint format',
     inputFormats: ['.pdf'],
     outputFormat: '.pptx',
-    icon: 'FilePresentation',
+    icon: FilePresentation,
     color: 'pink'
   },
   'translate-pdf': {
@@ -76,7 +75,7 @@ const toolConfigs = {
     description: 'Translate PDF documents to multiple languages',
     inputFormats: ['.pdf'],
     outputFormat: '.pdf',
-    icon: 'Globe',
+    icon: Globe,
     color: 'indigo'
   },
   'compress-photo': {
@@ -84,7 +83,7 @@ const toolConfigs = {
     description: 'Reduce image file size without losing quality',
     inputFormats: ['.jpg', '.jpeg', '.png', '.gif', '.webp'],
     outputFormat: 'Same format',
-    icon: 'Image',
+    icon: Image,
     color: 'teal'
   },
   'photo-size': {
@@ -92,7 +91,7 @@ const toolConfigs = {
     description: 'Resize images to specific dimensions (1×2cm, 3×4cm, etc.)',
     inputFormats: ['.jpg', '.jpeg', '.png'],
     outputFormat: 'Same format',
-    icon: 'Image',
+    icon: Image,
     color: 'cyan'
   },
   'google-translate': {
@@ -100,7 +99,7 @@ const toolConfigs = {
     description: 'Translate files and documents using Google Translate',
     inputFormats: ['.txt', '.doc', '.docx', '.pdf'],
     outputFormat: 'Same format',
-    icon: 'Globe',
+    icon: Globe,
     color: 'emerald'
   },
   'youtube-summarize': {
@@ -108,21 +107,9 @@ const toolConfigs = {
     description: 'Get summary from YouTube video links',
     inputFormats: ['YouTube URL'],
     outputFormat: '.txt',
-    icon: 'Youtube',
+    icon: Youtube,
     color: 'red'
   }
-};
-
-// Icon component mapping
-const iconMap = {
-  'File': File,
-  'Image': Image,
-  'Globe': Globe,
-  'FileText': FileText,
-  'Code': Code,
-  'FileSpreadsheet': FileSpreadsheet,
-  'FilePresentation': FilePresentation,
-  'Youtube': Youtube
 };
 
 export default function ToolPage() {
@@ -133,11 +120,11 @@ export default function ToolPage() {
     description: 'Convert your files easily',
     inputFormats: ['.txt'],
     outputFormat: '.txt',
-    icon: 'File',
+    icon: File,
     color: 'gray'
   };
 
-  const IconComponent = iconMap[tool.icon] || File;
+  const IconComponent = tool.icon;
   
   const [file, setFile] = useState(null);
   const [isConverting, setIsConverting] = useState(false);
@@ -148,7 +135,6 @@ export default function ToolPage() {
     language: 'en'
   });
 
-  // Simple file upload without react-dropzone for now
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {
@@ -165,7 +151,6 @@ export default function ToolPage() {
     
     setIsConverting(true);
     
-    // Simulate API call
     setTimeout(() => {
       if (toolId === 'youtube-summarize') {
         setConvertedFile({
@@ -192,7 +177,6 @@ export default function ToolPage() {
 
   const handleDownload = () => {
     if (convertedFile) {
-      // Create a blob and download
       const blob = new Blob([convertedFile.content || 'Sample content'], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -218,7 +202,6 @@ export default function ToolPage() {
       <Navbar />
       
       <div className="container mx-auto px-4 py-8">
-        {/* Back Button */}
         <Link 
           href="/" 
           className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-6"
@@ -227,7 +210,6 @@ export default function ToolPage() {
           Back to All Tools
         </Link>
 
-        {/* Tool Header */}
         <div className="text-center mb-12">
           <div className={`inline-flex items-center justify-center p-4 rounded-2xl ${getColorClass(tool.color, 'bg')} mb-4`}>
             <IconComponent className={`h-10 w-10 ${getColorClass(tool.color, 'text')}`} />
@@ -241,7 +223,6 @@ export default function ToolPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {/* Left Column - Upload Area */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg p-6">
               
@@ -262,7 +243,6 @@ export default function ToolPage() {
                 </div>
               ) : (
                 <>
-                  {/* Upload Zone */}
                   <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-gray-50 transition-colors">
                     <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-lg font-medium text-gray-700 mb-2">
@@ -286,7 +266,6 @@ export default function ToolPage() {
                     </p>
                   </div>
 
-                  {/* File Preview */}
                   {file && (
                     <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
                       <div className="flex items-center justify-between">
@@ -311,7 +290,6 @@ export default function ToolPage() {
                 </>
               )}
 
-              {/* Convert Button */}
               <div className="mt-8">
                 <button
                   onClick={handleConvert}
@@ -329,7 +307,6 @@ export default function ToolPage() {
                 </button>
               </div>
 
-              {/* Result Section */}
               {convertedFile && (
                 <div className="mt-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200">
                   <div className="flex items-center gap-3 mb-4">
@@ -364,18 +341,13 @@ export default function ToolPage() {
                     >
                       {isYouTubeTool ? 'New Summary' : 'Convert Another File'}
                     </button>
-                    <button className="px-6 py-2 border border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50">
-                      Share Result
-                    </button>
                   </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Right Column - Settings & Info */}
           <div className="space-y-6">
-            {/* Settings Panel */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center gap-3 mb-6">
                 <Settings className="h-5 w-5 text-gray-600" />
@@ -383,7 +355,6 @@ export default function ToolPage() {
               </div>
               
               <div className="space-y-4">
-                {/* Photo Compression Settings */}
                 {(toolId === 'compress-photo' || toolId === 'photo-size') && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -414,7 +385,6 @@ export default function ToolPage() {
                   </div>
                 )}
 
-                {/* Translation Settings */}
                 {(toolId === 'translate-pdf' || toolId === 'google-translate') && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -440,7 +410,6 @@ export default function ToolPage() {
               </div>
             </div>
 
-            {/* Features */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-lg font-semibold mb-4">Features</h3>
               <ul className="space-y-3">
@@ -450,7 +419,7 @@ export default function ToolPage() {
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span>No Registration Required</span>
+                  <span>No Registration</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
@@ -463,7 +432,6 @@ export default function ToolPage() {
               </ul>
             </div>
 
-            {/* Tips */}
             <div className="bg-blue-50 rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-3">
                 <AlertCircle className="h-5 w-5 text-blue-600" />
@@ -472,7 +440,7 @@ export default function ToolPage() {
               <ul className="text-sm text-blue-700 space-y-2">
                 <li>• Maximum file size: 100MB</li>
                 <li>• Files are deleted after processing</li>
-                <li>• No limit on number of conversions</li>
+                <li>• No limit on conversions</li>
                 {isYouTubeTool && (
                   <li>• Works with public YouTube videos</li>
                 )}
@@ -487,7 +455,6 @@ export default function ToolPage() {
   );
 }
 
-// Helper function for color classes
 function getColorClass(color, type) {
   const colorMap = {
     purple: type === 'bg' ? 'bg-purple-100' : 'text-purple-600',
