@@ -1,16 +1,16 @@
 'use client';
 
-import { ArrowRight, FileText, Image, Youtube, FileSpreadsheet, FilePresentation, Globe } from 'lucide-react';
+import { ArrowRight, FileText, Image, Youtube, FileSpreadsheet, Globe } from 'lucide-react';
 import { useState } from 'react';
 
 const iconMap = {
   'word': FileText,
   'pdf': FileText,
   'excel': FileSpreadsheet,
-  'ppt': FilePresentation,
+  'ppt': FileText, // FilePresentation हटाइयो, FileText प्रयोग
   'photo': Image,
   'youtube': Youtube,
-  'translate': Globe   // ✔ FIXED
+  'translate': Globe
 };
 
 export default function ToolCard({ title, description, icon, category, actionText = "Convert Now" }) {
